@@ -1,7 +1,7 @@
 """
 app.py
 ------
-Phase 7: Streamlit chatbot interface.
+Streamlit chatbot interface.
 
 Features:
 - Chat interface with streaming responses
@@ -15,9 +15,7 @@ import streamlit as st
 from src.rag_pipe import RAGPipeline
 
 
-# ──────────────────────────────────────────────
-# PAGE CONFIG
-# ──────────────────────────────────────────────
+
 
 st.set_page_config(
     page_title="eBay Agreement Chatbot",
@@ -26,9 +24,7 @@ st.set_page_config(
 )
 
 
-# ──────────────────────────────────────────────
-# LOAD PIPELINE (ONLY ONCE)
-# ──────────────────────────────────────────────
+
 
 @st.cache_resource(show_spinner="Loading RAG pipeline...")
 def load_pipeline():
@@ -38,9 +34,6 @@ def load_pipeline():
 pipeline = load_pipeline()
 
 
-# ──────────────────────────────────────────────
-# SOURCE RENDERING HELPER
-# ──────────────────────────────────────────────
 
 def render_sources(chunks):
     """
@@ -89,9 +82,8 @@ font-size:0.9em;
             st.markdown("---")
 
 
-# ──────────────────────────────────────────────
-# SIDEBAR
-# ──────────────────────────────────────────────
+#sidebar
+
 
 with st.sidebar:
 
@@ -137,9 +129,8 @@ ChromaDB → Retrieval → Groq Llama 3
         st.rerun()
 
 
-# ──────────────────────────────────────────────
-# MAIN PAGE
-# ──────────────────────────────────────────────
+# MAIN 
+
 
 st.title("🤖 eBay User Agreement Chatbot")
 
@@ -155,9 +146,9 @@ Generation (RAG) and grounded strictly in the document.
 st.markdown("---")
 
 
-# ──────────────────────────────────────────────
-# CHAT HISTORY
-# ──────────────────────────────────────────────
+
+# Chat history
+
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
@@ -176,9 +167,8 @@ for message in st.session_state.messages:
             render_sources(message["chunks"])
 
 
-# ──────────────────────────────────────────────
-# USER INPUT
-# ──────────────────────────────────────────────
+# input
+
 
 prompt = st.chat_input(
     "Ask about the eBay User Agreement..."
