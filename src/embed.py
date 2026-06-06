@@ -1,7 +1,7 @@
 """
 embed.py
 --------
-Phase 3: Generate embeddings and store them in ChromaDB.
+Generating embeddings and store them in ChromaDB.
 
 What this file does:
 1. Loads chunks from data/chunks.json
@@ -16,22 +16,21 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 
 
-# ──────────────────────────────────────────────
-# CONFIG
-# ──────────────────────────────────────────────
+
 
 CHUNKS_PATH = os.path.join("data", "chunks.json")
 VECTORDB_PATH = os.path.join("vectordb")
 COLLECTION_NAME = "ebay_user_agreement"
 
 # Primary model: fast, lightweight, great for legal retrieval
-# Fallback: "all-MiniLM-L6-v2" if BGE fails to download
+
 EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
 
 
-# ──────────────────────────────────────────────
-# FUNCTIONS
-# ──────────────────────────────────────────────
+
+# function
+
+
 
 def load_chunks(path: str) -> list[dict]:
     """

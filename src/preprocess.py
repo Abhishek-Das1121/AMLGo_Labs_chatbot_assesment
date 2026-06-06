@@ -15,17 +15,13 @@ import os
 from pypdf import PdfReader
 
 
-# ──────────────────────────────────────────────
-# CONFIG
-# ──────────────────────────────────────────────
+
 
 PDF_PATH = os.path.join("data", "ebay_user_agreement.pdf")
 OUTPUT_PATH = os.path.join("data", "cleaned_text.txt")
 
 
-# ──────────────────────────────────────────────
-# FUNCTIONS
-# ──────────────────────────────────────────────
+
 
 def extract_text_from_pdf(pdf_path: str) -> str:
     """
@@ -43,7 +39,7 @@ def extract_text_from_pdf(pdf_path: str) -> str:
             print(f"  [Warning] Page {page_num + 1} returned no text.")
 
     full_text = "\n".join(pages_text)
-    print(f"[✓] Extracted text from {len(reader.pages)} pages.")
+    print(f"Extracted text from {len(reader.pages)} pages.")
     return full_text
 
 
@@ -75,7 +71,7 @@ def clean_text(raw_text: str) -> str:
     # Strip overall leading/trailing whitespace
     text = text.strip()
 
-    print(f"[✓] Text cleaned. Total characters: {len(text)}")
+    print(f"Text cleaned. Total characters: {len(text)}")
     return text
 
 
@@ -86,12 +82,10 @@ def save_text(text: str, output_path: str) -> None:
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     with open(output_path, "w", encoding="utf-8") as f:
         f.write(text)
-    print(f"[✓] Cleaned text saved to: {output_path}")
+    print(f" Cleaned text saved to: {output_path}")
 
 
-# ──────────────────────────────────────────────
-# MAIN
-# ──────────────────────────────────────────────
+#main
 
 def run_preprocessing():
     """

@@ -15,9 +15,7 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 
 
-# ──────────────────────────────────────────────
-# CONFIG
-# ──────────────────────────────────────────────
+
 
 VECTORDB_PATH = os.path.join("vectordb")
 COLLECTION_NAME = "ebay_user_agreement"
@@ -27,9 +25,7 @@ TOP_K = 6
 MIN_SIMILARITY = 0.65
 
 
-# ──────────────────────────────────────────────
-# RETRIEVER CLASS
-# ──────────────────────────────────────────────
+
 
 class Retriever:
     """
@@ -150,9 +146,7 @@ class Retriever:
         return "\n\n".join(context_parts)
 
 
-# ──────────────────────────────────────────────
-# QUICK TEST
-# ──────────────────────────────────────────────
+
 
 if __name__ == "__main__":
 

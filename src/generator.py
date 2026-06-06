@@ -1,7 +1,7 @@
 """
 generator.py
 ------------
-Phase 5: Generating grounded answers using Groq API with streaming.
+Generating grounded answers using Groq API with streaming.
 
 What this file does:
 1. Takes the retrieved context + user question
@@ -19,9 +19,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-# ──────────────────────────────────────────────
-# CONFIGURATION
-# ──────────────────────────────────────────────
+
 
 GROQ_MODEL = "llama-3.1-8b-instant"
 # GROQ_MODEL = "llama-3.3-70b-versatile"
@@ -33,9 +31,7 @@ TEMPERATURE = 0
 MAX_CONTEXT_CHARS = 12000
 
 
-# ──────────────────────────────────────────────
-# PROMPT TEMPLATE
-# ──────────────────────────────────────────────
+
 
 SYSTEM_PROMPT = """You are a precise document question-answering assistant.
 
@@ -86,9 +82,7 @@ ANSWER
 """
 
 
-# ──────────────────────────────────────────────
-# GENERATOR CLASS
-# ──────────────────────────────────────────────
+
 
 class Generator:
     """
@@ -182,9 +176,7 @@ class Generator:
         return full_answer
 
 
-# ──────────────────────────────────────────────
-# QUICK TEST
-# ──────────────────────────────────────────────
+
 
 if __name__ == "__main__":
 

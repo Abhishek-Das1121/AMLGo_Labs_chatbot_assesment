@@ -1,7 +1,6 @@
 """
 chunking.py
------------
-Phase 2: Split cleaned text into sentence-aware chunks.
+Split cleaned text into sentence-aware chunks.
 
 What this file does:
 1. Reads the cleaned text from data/cleaned_text.txt
@@ -15,9 +14,8 @@ import json
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
-# ──────────────────────────────────────────────
-# CONFIG
-# ──────────────────────────────────────────────
+
+
 
 CLEANED_TEXT_PATH = os.path.join("data", "cleaned_text.txt")
 CHUNKS_OUTPUT_PATH = os.path.join("data", "chunks.json")
@@ -33,9 +31,9 @@ CHUNK_OVERLAP = 200
 SEPARATORS = ["\n\n", "\n", ". ", "! ", "? ", "; ", " "]
 
 
-# ──────────────────────────────────────────────
+
 # FUNCTIONS
-# ──────────────────────────────────────────────
+
 
 def load_cleaned_text(path: str) -> str:
     """
@@ -114,9 +112,7 @@ def preview_chunks(chunks: list[dict], n: int = 3) -> None:
     print("\n--- End Preview ---\n")
 
 
-# ──────────────────────────────────────────────
-# MAIN
-# ──────────────────────────────────────────────
+#main
 
 def run_chunking() -> list[dict]:
     """
