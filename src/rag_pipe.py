@@ -1,6 +1,6 @@
 """
 rag_pipe.py
----------------
+
 The complete RAG pipeline  retriieval + generation combined.
 
 What this file does:
