@@ -1,6 +1,6 @@
 """
 retriever.py
-------------
+
 Phase 4: Retrieve the most relevant chunks for a user query.
 
 What this file does:
