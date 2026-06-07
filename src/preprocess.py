@@ -1,7 +1,6 @@
 """
 preprocess.py
--------------
-Phase 1: Extract and clean text from the eBay User Agreement PDF.
+
 
 What this file does:
 1. Reads the PDF from the data/ folder
@@ -92,7 +91,7 @@ def run_preprocessing():
     Full preprocessing pipeline:
     PDF → Extract → Clean → Save
     """
-    print("\n=== Phase 1: Preprocessing ===\n")
+    print("\n Preprocessing \n")
 
     if not os.path.exists(PDF_PATH):
         raise FileNotFoundError(
@@ -105,7 +104,7 @@ def run_preprocessing():
     cleaned = clean_text(raw_text)
     save_text(cleaned, OUTPUT_PATH)
 
-    print("\n[✓] Phase 1 complete. Ready for chunking.\n")
+    print("\n Ready for chunking.\n")
     return cleaned
 
 
