@@ -349,8 +349,7 @@ Designed and tested for:
 ## Images
 
 <img width="1920" height="1027" alt="Screenshot (469)" src="https://github.com/user-attachments/assets/4a984c5e-a7f0-45dd-aa70-4c3d3fba74f0" />
-<img width="1920" height="1080" alt="Screenshot (474) (1)" src="https://github.com/user-attachments/assets/d57ee243-d29c-4abd-8bf7-19ffaf544ac3" />
-<img width="1920" height="1080" alt="Screenshot (474)" src="https://github.com/user-attachments/assets/6439aa62-d9ed-466e-9aa4-2c5aca00fd3a" />
+<img width="1920" height="1011" alt="Screenshot (474)" src="https://github.com/user-attachments/assets/ae5fc1d6-5411-4af0-a0ef-73417dd72568" />
 <img width="1920" height="1080" alt="Screenshot (475)" src="https://github.com/user-attachments/assets/19278389-a34a-4178-93a7-ac1c2c475c67" />
 
 
