@@ -84,7 +84,7 @@ def chunk_text(text: str) -> list[dict]:
             "word_count": word_count,
         })
 
-    print(f"[✓] Created {len(chunks)} chunks.")
+    print(f"Created {len(chunks)} chunks.")
     print(f"    Avg word count per chunk: "
           f"{sum(c['word_count'] for c in chunks) // len(chunks)}")
     return chunks
@@ -119,14 +119,14 @@ def run_chunking() -> list[dict]:
     Full chunking pipeline:
     cleaned_text.txt → chunks → chunks.json
     """
-    print("\n=== Phase 2: Chunking ===\n")
+    print("\n: Chunking \n")
 
     text = load_cleaned_text(CLEANED_TEXT_PATH)
     chunks = chunk_text(text)
     save_chunks(chunks, CHUNKS_OUTPUT_PATH)
     preview_chunks(chunks)
 
-    print("Phase 2 complete. Ready for embedding.\n")
+    print("Ready for embedding.\n")
     return chunks
 
 
