@@ -1,6 +1,6 @@
 """
 generator.py
-------------
+
 Generating grounded answers using Groq API with streaming.
 
 What this file does:
@@ -87,7 +87,7 @@ ANSWER
 class Generator:
     """
     Handles LLM generation via Groq API.
-    Supports both streaming and non-streaming modes.
+    Support both streaming and non-streaming modes.
     """
 
     def __init__(self, model: str = GROQ_MODEL):
