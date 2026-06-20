@@ -1,134 +1,145 @@
 """
 chunking.py
-Split cleaned text into sentence-aware chunks.
+-----------
+Section-aware chunking.
 
-What this file does:
-1. Reads the cleaned text from data/cleaned_text.txt
-2. Splits it into overlapping chunks (150-250 words each)
-3. Saves chunks to data/chunks.json for inspection
-4. Returns a list of chunk dicts ready for embedding
+Pipeline:
+Page
+↓
+Split into semantic sections 
+↓
+Only split large sections further with RecursiveCharacterTextSplitter
+↓
+Preserve page metadata
+
+Benefits:
+- Better retrieval quality
+- Cleaner embeddings
+- Same latency
+- Same metadata format
+- Works for arbitrary PDFs
 """
 
-import os
-import json
+import re
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 
-
-
-
-CLEANED_TEXT_PATH = os.path.join("data", "cleaned_text.txt")
-CHUNKS_OUTPUT_PATH = os.path.join("data", "chunks.json")
-
-# ~1200 characters ≈ 200 words for English legal text
 CHUNK_SIZE = 1200
 CHUNK_OVERLAP = 200
 
-# Sentence-priority separators:
-# RecursiveCharacterTextSplitter tries these in order.
-# It first tries to split on paragraph breaks, then sentences,
-# then words — preserving legal clause integrity.
-SEPARATORS = ["\n\n", "\n", ". ", "! ", "? ", "; ", " "]
+_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=CHUNK_SIZE,
+    chunk_overlap=CHUNK_OVERLAP,
+    separators=["\n\n", "\n", ". ", "! ", "? ", "; ", ", ", " ", ""],
+    length_function=len,
+)
 
 
-
-# FUNCTIONS
-
-
-def load_cleaned_text(path: str) -> str:
+def split_into_sections(text: str) -> list[str]:
     """
-    Loads the cleaned text file from disk.
+    Split text on numbered headings like:
+
+    1. Introduction
+    2. About eBay
+    3. Using eBay
+
+    Keeps the heading attached to its section.
     """
-    if not os.path.exists(path):
-        raise FileNotFoundError(
-            f"Cleaned text not found at '{path}'.\n"
-            "Run preprocess.py first."
-        )
-    with open(path, "r", encoding="utf-8") as f:
-        text = f.read()
-    print(f"Loaded cleaned text intoo({len(text)} characters).")
-    return text
+
+    pattern = r"\n(?=\d+\.\s+[A-Z])"
+
+    sections = re.split(pattern, text)
+
+    return [section.strip() for section in sections if section.strip()]
 
 
-def chunk_text(text: str) -> list[dict]:
+def chunk_pages(pages: list[dict], source_filename: str) -> list[dict]:
     """
-    Splits text into overlapping sentence-aware chunks.
+    Create semantic chunks while preserving page metadata.
 
-    Returns a list of dicts:
+    Returns:
     [
         {
             "chunk_id": 0,
             "text": "...",
-            "char_count": 123,
-            "word_count": 45
-        },
-        ...
+            "page": 1,
+            "source": "...",
+            "word_count": 180
+        }
     ]
     """
-    splitter = RecursiveCharacterTextSplitter(
-        chunk_size=CHUNK_SIZE,
-        chunk_overlap=CHUNK_OVERLAP,
-        separators=SEPARATORS,
-        length_function=len,
-    )
-
-    raw_chunks = splitter.split_text(text)
 
     chunks = []
-    for i, chunk_text in enumerate(raw_chunks):
-        word_count = len(chunk_text.split())
-        chunks.append({
-            "chunk_id": i,
-            "text": chunk_text.strip(),
-            "char_count": len(chunk_text),
-            "word_count": word_count,
-        })
+    chunk_id = 0
 
+<<<<<<< HEAD
     print(f"Created {len(chunks)} chunks.")
     print(f"    Avg word count per chunk: "
           f"{sum(c['word_count'] for c in chunks) // len(chunks)}")
     return chunks
+=======
+    for page_entry in pages:
+>>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
 
+        page_num = page_entry["page"]
+        page_text = page_entry["text"]
 
-def save_chunks(chunks: list[dict], output_path: str) -> None:
-    """
-    Saves chunks to a JSON file for inspection.
-    """
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    with open(output_path, "w", encoding="utf-8") as f:
-        json.dump(chunks, f, indent=2, ensure_ascii=False)
-    print(f"Chunks saved in: {output_path}")
+        # Skip very small pages
+        if len(page_text.split()) < 5:
+            continue
 
+        # -------- Stage 1: section split --------
+        sections = split_into_sections(page_text)
 
-def preview_chunks(chunks: list[dict], n: int = 3) -> None:
-    """
-    Prints the first n chunks for a quick sanity check.
-    """
-    print(f"\n--- Preview: First {n} chunks ---")
-    for chunk in chunks[:n]:
-        print(f"\n[Chunk {chunk['chunk_id']}] "
-              f"({chunk['word_count']} words, {chunk['char_count']} chars)")
-        print(chunk["text"][:200] + "...")
-    print("\n--- End Preview ---\n")
+        # -------- Stage 2: split large sections --------
+        for section in sections:
 
+            if len(section) <= CHUNK_SIZE:
+                section_chunks = [section]
+            else:
+                section_chunks = _splitter.split_text(section)
 
-#main
+            # -------- Stage 3: process final chunks --------
+            for chunk_text in section_chunks:
 
+<<<<<<< HEAD
 def run_chunking() -> list[dict]:
     """
     Full chunking pipeline:
     cleaned_text.txt → chunks → chunks.json
     """
     print("\n: Chunking \n")
+=======
+                chunk_text = chunk_text.strip()
+>>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
 
-    text = load_cleaned_text(CLEANED_TEXT_PATH)
-    chunks = chunk_text(text)
-    save_chunks(chunks, CHUNKS_OUTPUT_PATH)
-    preview_chunks(chunks)
+                if not chunk_text:
+                    continue
 
+<<<<<<< HEAD
     print("Ready for embedding.\n")
     return chunks
+=======
+                # Ignore tiny chunks (titles etc.)
+                if len(chunk_text.split()) < 20:
+                    continue
+>>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
 
+                chunks.append(
+                    {
+                        "chunk_id": chunk_id,
+                        "text": chunk_text,
+                        "page": page_num,
+                        "source": source_filename,
+                        "word_count": len(chunk_text.split()),
+                    }
+                )
 
-if __name__ == "__main__":
-    run_chunking()
+                chunk_id += 1
+
+    print(
+        f"[chunking] Created {len(chunks)} chunks across "
+        f"{len(pages)} pages for '{source_filename}'."
+    )
+
+    return chunks

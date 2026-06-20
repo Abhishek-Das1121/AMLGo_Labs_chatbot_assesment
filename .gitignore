@@ -16,3 +16,24 @@ wheels/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Old app backup
+app_prev.py
+
+# Local databases
+chroma_db/
+
+# Uploaded PDFs
+uploads/
+
+# Test files
+test.py
+testchunk.py
+testem.py
+testembedding.py
+testgen.py
+testret.py
+testvector.py
+
+.streamlit/
+*.log

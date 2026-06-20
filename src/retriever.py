@@ -1,106 +1,111 @@
 """
 retriever.py
+<<<<<<< HEAD
 
 Phase 4: Retrieve the most relevant chunks for a user query.
+=======
+------------
+Retrieves the most relevant chunks for a user query.
+>>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
 
-What this file does:
-1. Loads the embedding model
-2. Connects to the existing ChromaDB collection
-3. Embeds the user's query
-4. Returns the top-K most similar chunks with similarity scores
+Improvements:
+- Handles short queries better.
+- Slightly increases recall (TOP_K = 8).
+- Prevents too many chunks from the same page.
+- Preserves page/source metadata for citations.
 """
 
-import os
-import chromadb
-from sentence_transformers import SentenceTransformer
+from dataclasses import dataclass
+
+from src.vector_store import query_collection
+
+TOP_K = 8
+MAX_CHUNKS_PER_PAGE = 2
 
 
+@dataclass
+class RetrievedChunk:
+    """One retrieved chunk with everything the UI needs."""
+    chunk_id: int
+    text: str
+    similarity_score: float
+    page: int
+    source: str
+    word_count: int
+    rank: int
 
 
-VECTORDB_PATH = os.path.join("vectordb")
-COLLECTION_NAME = "ebay_user_agreement"
-EMBEDDING_MODEL_NAME = "BAAI/bge-small-en-v1.5"
-
-TOP_K = 6
-MIN_SIMILARITY = 0.65
-
-
-
-
-class Retriever:
+def preprocess_query(query: str) -> str:
     """
-    Handles all retrieval operations:
-    - Loads model once
-    - Connects to ChromaDB
-    - Retrieves top-K chunks with scores
+    Improve very short queries without affecting normal ones.
     """
 
-    def __init__(
-        self,
-        vectordb_path: str = VECTORDB_PATH,
-        collection_name: str = COLLECTION_NAME,
-        model_name: str = EMBEDDING_MODEL_NAME,
-        top_k: int = TOP_K,
-    ):
-        self.top_k = top_k
-        self.model_name = model_name
+    query = query.strip()
 
-        print("Loading retriever...")
+    if len(query.split()) < 3:
+        query = f"Information about {query}"
 
-        # Load embedding model
-        self.model = SentenceTransformer(model_name)
+    return query
 
-        # Connect to ChromaDB
-        if not os.path.exists(vectordb_path):
-            raise FileNotFoundError(
-                f"Vector database not found at '{vectordb_path}'.\n"
-                "Run embed.py first to build the vector database."
+
+def retrieve(
+    pdf_hash: str,
+    query: str,
+    k: int = TOP_K,
+) -> list[RetrievedChunk]:
+    """
+    Retrieve top-k chunks for one document.
+    """
+
+    query = preprocess_query(query)
+
+    results = query_collection(
+        pdf_hash=pdf_hash,
+        query=query,
+        k=k,
+    )
+
+    documents = results["documents"][0]
+    metadatas = results["metadatas"][0]
+    distances = results["distances"][0]
+
+    chunks = []
+    page_counts = {}
+
+    rank = 1
+
+    for doc, meta, dist in zip(documents, metadatas, distances):
+
+        page = int(meta["page"])
+
+        if page_counts.get(page, 0) >= MAX_CHUNKS_PER_PAGE:
+            continue
+
+        page_counts[page] = page_counts.get(page, 0) + 1
+
+        similarity = max(
+            0.0,
+            min(
+                1.0,
+                1.0 - dist,
+            ),
+        )
+
+        chunks.append(
+            RetrievedChunk(
+                chunk_id=int(meta["chunk_id"]),
+                text=doc,
+                similarity_score=round(similarity, 4),
+                page=page,
+                source=meta["source"],
+                word_count=int(meta["word_count"]),
+                rank=rank,
             )
-
-        self.client = chromadb.PersistentClient(path=vectordb_path)
-        self.collection = self.client.get_collection(name=collection_name)
-
-        total_chunks = self.collection.count()
-        print(f"Retriever ready. Collection has {total_chunks} chunks.")
-
-    def retrieve(self, query: str) -> list[dict]:
-        """
-        Retrieves the top-K most relevant chunks for a given query.
-
-        Returns:
-        [
-            {
-                "chunk_id": 3,
-                "text": "...",
-                "similarity_score": 0.87,
-                "word_count": 198,
-            }
-        ]
-        """
-
-        if not query.strip():
-            return []
-
-        # BGE query instruction prefix
-        prefixed_query = (
-            f"Represent this sentence for searching relevant passages: {query}"
         )
 
-        # Embed query
-        query_embedding = self.model.encode(
-            prefixed_query,
-            normalize_embeddings=True,
-        ).tolist()
+        rank += 1
 
-        # Query ChromaDB
-        results = self.collection.query(
-            query_embeddings=[query_embedding],
-            n_results=self.top_k,
-            include=["documents", "metadatas", "distances"],
-        )
-
-        retrieved_chunks = []
-
+<<<<<<< HEAD
         for i in range(len(results["documents"][0])):
 
             distance = results["distances"][0][i]
@@ -177,3 +182,6 @@ if __name__ == "__main__":
             )
 
     print("\nRetriever test complete.\n")
+=======
+    return chunks
+>>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
