@@ -72,14 +72,9 @@ def chunk_pages(pages: list[dict], source_filename: str) -> list[dict]:
     chunks = []
     chunk_id = 0
 
-<<<<<<< HEAD
-    print(f"Created {len(chunks)} chunks.")
-    print(f"    Avg word count per chunk: "
-          f"{sum(c['word_count'] for c in chunks) // len(chunks)}")
-    return chunks
-=======
+
     for page_entry in pages:
->>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
+
 
         page_num = page_entry["page"]
         page_text = page_entry["text"]
@@ -102,28 +97,18 @@ def chunk_pages(pages: list[dict], source_filename: str) -> list[dict]:
             # -------- Stage 3: process final chunks --------
             for chunk_text in section_chunks:
 
-<<<<<<< HEAD
-def run_chunking() -> list[dict]:
-    """
-    Full chunking pipeline:
-    cleaned_text.txt → chunks → chunks.json
-    """
-    print("\n: Chunking \n")
-=======
+
                 chunk_text = chunk_text.strip()
->>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
+
 
                 if not chunk_text:
                     continue
 
-<<<<<<< HEAD
-    print("Ready for embedding.\n")
-    return chunks
-=======
+
                 # Ignore tiny chunks (titles etc.)
                 if len(chunk_text.split()) < 20:
                     continue
->>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
+
 
                 chunks.append(
                     {
