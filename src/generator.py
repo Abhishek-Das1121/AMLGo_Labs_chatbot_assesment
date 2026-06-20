@@ -1,12 +1,7 @@
 """
 generator.py
-<<<<<<< HEAD
-
-Generating grounded answers using Groq API with streaming.
-=======
 ------------
 Building grounded prompts and streams answers from Groq.
->>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
 
 Features:
 - Uses only retrieved document context.
@@ -31,48 +26,7 @@ def get_groq_client():
     """
     global _client_cache
 
-<<<<<<< HEAD
-    return f"""
-====================
-DOCUMENT CONTEXT
-====================
-
-{context}
-
-====================
-QUESTION
-====================
-
-{question}
-
-====================
-INSTRUCTIONS
-====================
-
-- Answer only using the document context above.
-- Do not use outside knowledge.
-- If the answer is not explicitly present in the context,
-  respond exactly:
-  "I could not find this information in the provided document."
-
-====================
-ANSWER
-====================
-"""
-
-
-
-
-class Generator:
-    """
-    Handles LLM generation via Groq API.
-    Support both streaming and non-streaming modes.
-    """
-
-    def __init__(self, model: str = GROQ_MODEL):
-=======
     if _client_cache is None:
->>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
 
         api_key = os.getenv("GROQ_API_KEY")
 
@@ -255,9 +209,6 @@ def stream_answer(
 
         delta = chunk.choices[0].delta
 
-<<<<<<< HEAD
-    print("\n\nGenerator test complete.\n")
-=======
         if delta and delta.content:
             yield delta.content
 
@@ -278,4 +229,3 @@ def get_full_answer(
             history=history,
         )
     )
->>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
