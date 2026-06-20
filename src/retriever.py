@@ -1,12 +1,7 @@
 """
 retriever.py
-<<<<<<< HEAD
-
-Phase 4: Retrieve the most relevant chunks for a user query.
-=======
 ------------
 Retrieves the most relevant chunks for a user query.
->>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
 
 Improvements:
 - Handles short queries better.
@@ -105,83 +100,4 @@ def retrieve(
 
         rank += 1
 
-<<<<<<< HEAD
-        for i in range(len(results["documents"][0])):
-
-            distance = results["distances"][0][i]
-
-            # Convert distance → cosine similarity
-            similarity = round(1 - distance, 4)
-
-            metadata = results["metadatas"][0][i]
-
-            # Hallucination guardrail
-            if similarity >= MIN_SIMILARITY:
-
-                retrieved_chunks.append(
-                    {
-                        "chunk_id": metadata["chunk_id"],
-                        "text": results["documents"][0][i],
-                        "similarity_score": similarity,
-                        "word_count": metadata.get("word_count", 0),
-                    }
-                )
-
-        # Sort after collecting ALL chunks
-        retrieved_chunks.sort(
-            key=lambda x: x["similarity_score"],
-            reverse=True,
-        )
-
-        return retrieved_chunks
-
-    def format_context(self, retrieved_chunks: list[dict]) -> str:
-        """
-        Formats retrieved chunks into a single context string
-        for injection into the prompt.
-        """
-
-        context_parts = []
-
-        for i, chunk in enumerate(retrieved_chunks, start=1):
-            context_parts.append(
-                f"[Source {i}]\n{chunk['text']}"
-            )
-
-        return "\n\n".join(context_parts)
-
-
-
-
-if __name__ == "__main__":
-
-    print("\nRetriever Test\n")
-
-    retriever = Retriever()
-
-    test_queries = [
-        "Can users opt out of arbitration?",
-        "What is the eBay Money Back Guarantee?",
-        "Can eBay terminate my account?",
-        "What happens if a seller does not ship an item?",
-    ]
-
-    for query in test_queries:
-
-        print(f"\nQuery: {query}")
-
-        results = retriever.retrieve(query)
-
-        print(f"Retrieved {len(results)} chunks")
-
-        for chunk in results:
-            print(
-                f"  [Chunk {chunk['chunk_id']}] "
-                f"Score: {chunk['similarity_score']:.4f} | "
-                f"{chunk['text'][:100]}..."
-            )
-
-    print("\nRetriever test complete.\n")
-=======
     return chunks
->>>>>>> f2d8605 (Release DocuBuddy V2 with improved RAG pipeline and UI)
